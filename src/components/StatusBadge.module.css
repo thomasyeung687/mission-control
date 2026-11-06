@@ -1,0 +1,89 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 8px 0 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.runningBadge {
+  background: var(--running-soft);
+  color: var(--running);
+}
+
+.waitingBadge {
+  background: var(--waiting-soft);
+  color: var(--waiting);
+}
+
+.idleBadge {
+  background: var(--idle-soft);
+  color: var(--idle);
+}
+
+.endedBadge {
+  background: var(--ended-soft);
+  color: var(--ended);
+}
+
+.icon {
+  position: relative;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex: none;
+}
+
+.running {
+  border-radius: 50%;
+  background: var(--running);
+}
+
+.running::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--running);
+  opacity: 0;
+  animation: pulse 1.6s ease-out infinite;
+}
+
+.waiting {
+  width: 9px;
+  height: 9px;
+  background: var(--waiting);
+  transform: rotate(45deg) scale(0.92);
+  border-radius: 1px;
+}
+
+.idle {
+  border-radius: 50%;
+  border: 2px solid var(--idle);
+}
+
+.ended {
+  border-radius: 2px;
+  background: var(--ended);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .running::after {
+    animation: none;
+  }
+}
