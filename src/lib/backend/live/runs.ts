@@ -9,7 +9,17 @@ import { environmentId } from "./environment";
 
 const RUN_PAGE_SIZE = 50;
 
-async function lastStatusEvent(sessionId: string): Promise<SessionEvent | null> {
+interface CachedStatus {
+  updatedAt: string;
+  fetchedAt: number;
+  event: SessionEvent | null;
+}
+
+const statusCache = new Map<string, CachedStatus>();
+const STATUS_CACHE_LIMIT = 500;
+const STATUS_CACHE_TTL_MS = 60_000;
+
+async function fetchLastStatusEvent(sessionId: string): Promise<SessionEvent | null> {
   const page = await anthropic().beta.sessions.events.list(sessionId, {
     types: [...statusEventTypes],
     order: "desc",
@@ -18,8 +28,19 @@ async function lastStatusEvent(sessionId: string): Promise<SessionEvent | null> 
   return page.data[0] ?? null;
 }
 
+async function lastStatusEvent(session: BetaManagedAgentsSession): Promise<SessionEvent | null> {
+  if (session.status === "running" || session.status === "rescheduling") return null;
+  const cached = statusCache.get(session.id);
+  const fresh = cached && Date.now() - cached.fetchedAt < STATUS_CACHE_TTL_MS;
+  if (fresh && cached.updatedAt === session.updated_at) return cached.event;
+  const event = await fetchLastStatusEvent(session.id);
+  if (statusCache.size >= STATUS_CACHE_LIMIT) statusCache.clear();
+  statusCache.set(session.id, { updatedAt: session.updated_at, fetchedAt: Date.now(), event });
+  return event;
+}
+
 async function summarize(session: BetaManagedAgentsSession): Promise<RunSummary> {
-  return toRunSummary(session, await lastStatusEvent(session.id));
+  return toRunSummary(session, await lastStatusEvent(session));
 }
 
 export async function listRuns(filter: RunFilter = {}): Promise<RunSummary[]> {
