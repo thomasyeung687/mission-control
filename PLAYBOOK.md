@@ -4,6 +4,21 @@ How a chief-of-staff session runs Thomas's team. Every teammate is a Claude Code
 (claude.ai/code) on Thomas's Claude plan. The chief of staff uses Claude Code's remote session tools;
 Thomas chats with any teammate directly in the Claude app.
 
+## How a directive moves
+
+The chief of staff runs each of Thomas's directives with golf-native's `directive` skill. Every stage that
+skill gives to a subagent goes to a teammate session instead:
+
+| Stage  | Teammate                          | Gets                                      | Returns                               |
+| ------ | --------------------------------- | ----------------------------------------- | ------------------------------------- |
+| Brief  | Product manager                   | the directive, `NNN` and the brief's path | `work/briefs/NNN-<slug>.md`, pushed   |
+| Design | Designer                          | the brief path (and Thomas's comments)    | `design/<screen>.html`, pushed        |
+| Build  | Engineer                          | the brief, the mockup, `feat/NNN-<slug>`  | a pushed branch and the verify output |
+| Check  | QA and Reviewer, at the same time | the brief path and the branch only        | pass/fail evidence; findings          |
+
+The chief of staff publishes mockups for Thomas, opens and merges pull requests, and keeps `work/BOARD.md`
+current, all as that skill describes.
+
 ## Start a teammate
 
 Start one only when there is work for it. Check first that one isn't already running:
@@ -23,7 +38,8 @@ Record the new session ID in the roster (see [Update the dashboard](#update-the-
 
 ## Give it work
 
-Send a brief with `send_message` to the teammate's session ID. A good brief is short:
+Send a brief with `send_message` to the teammate's session ID. Point to files rather than pasting them: the
+brief's path, the branch, the mockup. A good brief is short:
 
 - **Goal** — one sentence on what Thomas wants.
 - **Where** — branch, files or screens, if known.
@@ -52,9 +68,10 @@ anything that needs his decision goes to him.
 
 ## Archive it
 
-Archive a teammate with `archive_session` when its work is merged or dropped, or it is stuck and starting
-fresh is simpler. Ask Thomas first; archiving is permanent and frees its container. Push or note anything
-worth keeping before you do. Remove it from the roster (or mark it `done`) in the same step.
+Archive a teammate with `archive_session` once its directive is merged or dropped, or when it is stuck and a
+fresh session is simpler. Archiving is permanent and frees its container, so first make sure its work is pushed.
+Remove it from the roster in the same step. Start a fresh one for the next directive: a short history keeps
+it focused and uses less of the plan.
 
 ## Update the dashboard
 
@@ -81,4 +98,5 @@ Statuses: `working` (busy on a task), `waiting` (needs Thomas: an approval, a de
   usage limits. Keep the team small, briefs tight, and archive idle teammates.
 - **Containers don't last.** A teammate's container is reclaimed after it has been idle for a while.
   Anything worth keeping must be pushed to a branch.
-- **Thomas decides.** Teammates never merge to main or ship. The chief of staff asks Thomas.
+- **Merging follows golf-native's rules.** Teammates never open or merge pull requests. The chief of staff
+  merges when the `directive` skill's merge rules hold, and asks Thomas first in the cases that skill lists.

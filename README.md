@@ -2,8 +2,9 @@
 
 How Thomas runs a small team of Claude agents on his **Claude plan**, with no Anthropic API key.
 
-- **Teammates** are Claude Code cloud sessions (claude.ai/code): a Designer, an Engineer, QA and a Reviewer,
-  working on [golf-native](https://github.com/thomasyeung687/golf-native).
+- **Teammates** are Claude Code cloud sessions (claude.ai/code): a Product manager, a Designer, an Engineer, QA
+  and a Reviewer, working on [golf-native](https://github.com/thomasyeung687/golf-native). Their job
+  descriptions and the team's process live in golf-native (`.claude/agents/` and the `directive` skill).
 - **A chief-of-staff session** starts them, sends them work and checks on them with Claude Code's own remote
   session tools. Teammates report back to it.
 - **The dashboard** is a private claude.ai page the chief of staff publishes and keeps current: who is
@@ -21,8 +22,8 @@ How Thomas runs a small team of Claude agents on his **Claude plan**, with no An
 
 ## Getting started
 
-1. In the Claude app, start a Claude Code session on this repo and paste the opening instructions from
-   [`team/chief-of-staff.md`](team/chief-of-staff.md). That session is the chief of staff.
+1. In the Claude app, start a Claude Code session with golf-native and this repo, and paste the opening
+   instructions from [`team/chief-of-staff.md`](team/chief-of-staff.md). That session is the chief of staff.
 2. Tell it what you want done on the Golf app. It starts the teammates it needs, following the playbook.
 3. Ask it for the dashboard link and pin it. Open any teammate's chat from there.
 
