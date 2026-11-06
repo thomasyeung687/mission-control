@@ -1,0 +1,50 @@
+{
+  "updatedAt": "2026-11-06T19:40:00Z",
+  "chiefOfStaff": {
+    "name": "Chief of staff",
+    "sessionId": "session_01ChiefOfStaffExample000"
+  },
+  "teammates": [
+    {
+      "name": "Reviewer",
+      "role": "Reviews branches before they merge",
+      "team": "golf",
+      "sessionId": "session_01ReviewerExample00000",
+      "status": "waiting",
+      "task": "Review the scorecard offline-sync branch",
+      "waitingOn": "Decide whether to merge feat/scorecard-sync after two small fixes",
+      "lastUpdate": "2026-11-06T19:32:00Z",
+      "lastNote": "Found one real bug (writes not awaited); fix is on review/scorecard-sync-fixes."
+    },
+    {
+      "name": "Engineer",
+      "role": "Builds features and fixes bugs",
+      "team": "golf",
+      "sessionId": "session_01EngineerExample00000",
+      "status": "working",
+      "task": "Add a shot-tracking map to the round screen",
+      "lastUpdate": "2026-11-06T19:38:00Z",
+      "lastNote": "Marker hook and tests done; now drawing the distance label."
+    },
+    {
+      "name": "QA",
+      "role": "Tests the app and reports what fails",
+      "team": "golf",
+      "sessionId": "session_01QAExample000000000",
+      "status": "idle",
+      "task": "Regression pass on the handicap calculator",
+      "lastUpdate": "2026-11-06T18:05:00Z",
+      "lastNote": "31 of 33 tests pass; the 2 failures are written up on qa/handicap-regressions."
+    },
+    {
+      "name": "Designer",
+      "role": "Designs screens and flows",
+      "team": "golf",
+      "sessionId": "session_01DesignerExample00000",
+      "status": "done",
+      "task": "Make the club picker work one-handed",
+      "lastUpdate": "2026-11-06T16:10:00Z",
+      "lastNote": "Merged. Ready to archive."
+    }
+  ]
+}

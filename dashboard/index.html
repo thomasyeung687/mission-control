@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Team Dashboard</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f6f8;
+        --surface: #ffffff;
+        --border: #e1e4e9;
+        --text: #14171c;
+        --muted: #5d6572;
+        --faint: #8a919c;
+        --accent: #2f5bd3;
+        --working: #2563eb;
+        --working-soft: #e3ecfd;
+        --waiting: #b45309;
+        --waiting-soft: #fdf1dc;
+        --idle: #6b7280;
+        --idle-soft: #eef0f3;
+        --done: #3f6b4f;
+        --done-soft: #e5f0e8;
+        --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          color-scheme: dark;
+          --bg: #0e1014;
+          --surface: #15181e;
+          --border: #262b33;
+          --text: #e5e8ed;
+          --muted: #9aa2ae;
+          --faint: #6e7682;
+          --accent: #7ea2ff;
+          --working: #6c9dff;
+          --working-soft: #1a2640;
+          --waiting: #f2b35a;
+          --waiting-soft: #33260f;
+          --idle: #8f97a3;
+          --idle-soft: #22262d;
+          --done: #7fbf95;
+          --done-soft: #18291f;
+        }
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0e1014;
+        --surface: #15181e;
+        --border: #262b33;
+        --text: #e5e8ed;
+        --muted: #9aa2ae;
+        --faint: #6e7682;
+        --accent: #7ea2ff;
+        --working: #6c9dff;
+        --working-soft: #1a2640;
+        --waiting: #f2b35a;
+        --waiting-soft: #33260f;
+        --idle: #8f97a3;
+        --idle-soft: #22262d;
+        --done: #7fbf95;
+        --done-soft: #18291f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 15px/1.45 var(--font);
+        -webkit-text-size-adjust: 100%;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 20px 16px calc(32px + env(safe-area-inset-bottom));
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      h2 {
+        margin: 24px 0 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+      }
+      .updated,
+      .empty {
+        color: var(--faint);
+        font-size: 13px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      li {
+        padding: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--border);
+        border-radius: 10px;
+      }
+      li.working {
+        border-left-color: var(--working);
+      }
+      li.waiting {
+        border-left-color: var(--waiting);
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .name {
+        font-weight: 650;
+      }
+      .role {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: currentColor;
+      }
+      .badge.working {
+        background: var(--working-soft);
+        color: var(--working);
+      }
+      .badge.working::before {
+        border-radius: 50%;
+      }
+      .badge.waiting {
+        background: var(--waiting-soft);
+        color: var(--waiting);
+      }
+      .badge.waiting::before {
+        transform: rotate(45deg) scale(0.9);
+      }
+      .badge.idle {
+        background: var(--idle-soft);
+        color: var(--idle);
+      }
+      .badge.idle::before {
+        background: none;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+      }
+      .badge.done {
+        background: var(--done-soft);
+        color: var(--done);
+      }
+      .badge.done::before {
+        border-radius: 2px;
+      }
+      .task {
+        margin: 8px 0 0;
+      }
+      .ask {
+        margin: 8px 0 0;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: var(--waiting-soft);
+        color: var(--text);
+      }
+      .note {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--faint);
+      }
+      .open {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 14px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--surface);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .open:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .error {
+        padding: 12px;
+        border-radius: 8px;
+        background: var(--waiting-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Team</h1>
+        <span class="updated" id="updated"></span>
+      </header>
+      <section aria-labelledby="waiting-heading">
+        <h2 id="waiting-heading">Waiting on you</h2>
+        <ul id="waiting"></ul>
+      </section>
+      <section aria-labelledby="team-heading">
+        <h2 id="team-heading">Everyone else</h2>
+        <ul id="team"></ul>
+      </section>
+    </main>
+    <script>
+      const LABELS = { working: "Working", waiting: "Waiting on you", idle: "Idle", done: "Done" };
+      const ORDER = { working: 0, idle: 1, done: 2 };
+      const CHAT_URL = "https://claude.ai/code/";
+
+      function ago(iso) {
+        const minutes = Math.round((Date.now() - Date.parse(iso)) / 60000);
+        if (!Number.isFinite(minutes)) return "";
+        if (minutes < 1) return "just now";
+        if (minutes < 60) return minutes + " min ago";
+        const hours = Math.round(minutes / 60);
+        if (hours < 24) return hours + (hours === 1 ? " hour ago" : " hours ago");
+        const days = Math.round(hours / 24);
+        return days + (days === 1 ? " day ago" : " days ago");
+      }
+
+      function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text) node.textContent = text;
+        return node;
+      }
+
+      function card(mate) {
+        const status = LABELS[mate.status] ? mate.status : "idle";
+        const item = el("li", status);
+        const top = el("div", "top");
+        top.append(el("span", "name", mate.name), el("span", "role", mate.role || ""));
+        top.append(el("span", "badge " + status, LABELS[status]));
+        item.append(top);
+        if (mate.task) item.append(el("p", "task", mate.task));
+        if (status === "waiting" && mate.waitingOn) item.append(el("p", "ask", mate.waitingOn));
+        if (mate.lastNote) item.append(el("p", "note", mate.lastNote));
+        const bottom = el("div", "bottom");
+        const when = el("span", "", mate.lastUpdate ? "Updated " + ago(mate.lastUpdate) : "");
+        bottom.append(when);
+        if (mate.sessionId) {
+          const link = el("a", "open", "Open chat");
+          link.href = CHAT_URL + encodeURIComponent(mate.sessionId);
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.setAttribute("aria-label", "Open chat with " + mate.name);
+          bottom.append(link);
+        }
+        item.append(bottom);
+        return item;
+      }
+
+      function fill(list, mates, emptyText) {
+        list.replaceChildren(...mates.map(card));
+        if (!mates.length) list.append(el("li", "empty", emptyText));
+      }
+
+      function render(roster) {
+        const mates = Array.isArray(roster.teammates) ? roster.teammates : [];
+        const waiting = mates.filter((m) => m.status === "waiting");
+        const others = mates
+          .filter((m) => m.status !== "waiting")
+          .sort((a, b) => (ORDER[a.status] ?? 3) - (ORDER[b.status] ?? 3));
+        fill(document.getElementById("waiting"), waiting, "Nothing needs you right now.");
+        fill(document.getElementById("team"), others, "No other teammates running.");
+        document.getElementById("updated").textContent = roster.updatedAt
+          ? "Updated " + ago(roster.updatedAt)
+          : "";
+      }
+
+      async function loadRoster() {
+        for (const path of ["roster.json", "roster.example.json"]) {
+          try {
+            const response = await fetch(path, { cache: "no-store" });
+            if (response.ok) return await response.json();
+          } catch {
+            continue;
+          }
+        }
+        throw new Error("No roster found");
+      }
+
+      loadRoster()
+        .then(render)
+        .catch(() => {
+          const main = document.querySelector("main");
+          main.replaceChildren(
+            el("h1", "", "Team"),
+            el(
+              "p",
+              "error",
+              "The team roster couldn’t be loaded. Ask the chief of staff to republish it.",
+            ),
+          );
+        });
+    </script>
+  </body>
+</html>
