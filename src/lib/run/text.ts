@@ -19,7 +19,7 @@ export function errorMessage(error: { type: string; message?: string }): string 
   return error.message ? `${label}: ${error.message}` : label;
 }
 
-const SUMMARY_KEYS = ["command", "file_path", "path", "pattern", "url", "query", "description"];
+const SUMMARY_KEYS = ["command", "pattern", "file_path", "path", "url", "query", "description"];
 
 export function summarizeToolInput(input: Record<string, unknown>): string {
   for (const key of SUMMARY_KEYS) {
