@@ -13,7 +13,9 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "verify": "bash scripts/verify.sh"
+    "verify": "bash scripts/verify.sh",
+    "smoke": "NODE_PATH=\"$(npm root -g)\" node scripts/smoke.mjs",
+    "screenshots": "NODE_PATH=\"$(npm root -g)\" node scripts/screenshots.mjs"
   },
   "engines": {
     "node": ">=20"
